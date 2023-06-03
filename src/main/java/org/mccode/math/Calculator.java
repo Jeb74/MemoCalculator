@@ -56,6 +56,7 @@ public abstract class Calculator {
                 }
             }
         }
+        return 0.0;
     }
 /*
 10 + 10 -> 10, 10
