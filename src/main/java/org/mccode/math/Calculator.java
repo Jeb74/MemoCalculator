@@ -1,18 +1,21 @@
 package org.mccode.math;
 
-import java.util.Stack;
-import javafx.util.Pair;
+
+import java.util.ArrayList;
 
 public abstract class Calculator {
 
+    /*
+    10 - 20 + (20 - 10)
+     */
     private enum Operations {
-        ADD("+", 2),
-        SUB("-", 3),
-        DIV("/", 5),
-        MUL("*", 4),
-        POW("^", 6),
-        LOG("log", 1),
-        SQRT("sqrt", 1);
+        ADD("+", 3),
+        SUB("-", 4),
+        MUL("*", 5),
+        DIV("/", 6),
+        POW("^", 7),
+        LOG("log", 8),
+        SQRT("sqrt", 8);
 
         private final String op;
         private final int precedence;
@@ -28,53 +31,50 @@ public abstract class Calculator {
         public String getOperator() {
             return op;
         }
-
+        //TODO rimuovere i metodi attuali e introdurre un metodo per ottenere la precedenza sulla base dell'operatore passato
 
     }
+    /*
+    10 + 10 - 9 * 5
+
+     */
 
     public final Double execute(String expression, Double[] variables) {
-        Stack<Operations> op = new Stack<>();
-        Stack<Double> val = new Stack<>();
-        int curr_precedence = 0;
-        StringBuilder curr_operation = new StringBuilder();
-        int start = -1;
-        for (int i = 0; i < expression.length(); i++) {
-            char c = expression.charAt(i);
-            switch (c) {
-                case (' ') -> {
-                    continue;
-                }
-                case ('(') -> {
-                    curr_precedence += 10;
-                }
-                case (')') -> {
-                    curr_precedence -= 10;
-                }
-                default -> {
-                    if (Character.isDigit(c) && start == -1) start = i;
-                    else if (!Character.isDigit(c) && c != '.' && start != -1) val.add(buildNumber(expression, start, i));
+        TreeNode<String> tree = null;
+        TreeNode<String> curr_node = null;
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0, start = -1; i < expression.length(); i++) {
+            if (Character.isDigit(expression.charAt(i))) {
+                start = i;
+                for (int j = i+1; j < expression.length(); j++) {
+                    if (!Character.isDigit(expression.charAt(j))) {
+                        break;
+                    }
                 }
             }
+            if (tree == null && curr_node != null) tree = curr_node;
         }
+        return evaluateTree(tree);
+        //TODO finire il parser delle espressioni: manca il parsing degli operatori e delle funzioni + il parsing dell'operatore negazione
+    }
+    /*
+    FLAGS:
+    VALUE/VARIABLE  : 0
+    OPERATOR        : 1
+    FUNCTION        : 2
+    PRECEDENCE:
+    VALUE           : 9
+    OPERATOR        : 5
+    FUNCTION        : 8
+    BRACKETS        : +10
+     */
+    private TreeNode<String> buildTree(TreeNode<String> currentNode, String value, byte flag, int precedence) {
+        if (currentNode == null) return new TreeNode<>(value, flag);
+        //TODO finire la struttura del costruttore dell'albero
+        return currentNode;
+    }
+
+    private double evaluateTree(TreeNode<String> tree) {
         return 0.0;
     }
-/*
-10 + 10 -> 10, 10
-           +
-           20
-
-(10 + 10) * 10 - 10 ->
-                     10, 10, 10
-                     + *
-                       -
-                     10, 100, 10
-                     + -
-                     10, 90
-                     +
-                     100
- */
-    private Double buildNumber(String expression, int start, int end) {
-        return Double.parseDouble(expression.substring(start, end));
-    }
-
 }
