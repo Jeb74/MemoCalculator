@@ -1,23 +1,20 @@
-package org.mccode.math;
+package org.mccode.utils;
 
 public class TreeNode<T> {
     private TreeNode<T> left = null;
     private TreeNode<T> right = null;
-    private TreeNode<T> parent = null;
-    private byte flag = 0;
     private final T value;
+    private final int precedence;
 
-    public TreeNode(T value, byte flag) {
+    public TreeNode(T value, int precedence) {
         this.value = value;
-        this.flag = flag;
+        this.precedence = precedence;
     }
 
     public T getValue() {
         return value;
     }
-    public byte getFlag() {
-        return flag;
-    }
+    public int getPrecedence() { return precedence; }
     public TreeNode<T> getLeft() {
         return left;
     }

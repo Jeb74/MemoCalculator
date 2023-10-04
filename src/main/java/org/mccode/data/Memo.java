@@ -21,6 +21,10 @@ public class Memo {
         return HISTORY.get(expression).get(variables);
     }
 
+    public static String getExpression(String reference) {
+        return HISTORY.keySet().stream().filter(k -> k.getName().equalsIgnoreCase(reference)).toArray(Expression[]::new)[0].getExpression();
+    }
+
     public static void addValToHistory(String var, double value) {
         var tmp = new Variable(var, value);
         var tempValue = VARIABLES.stream().filter(variable -> variable.isLast() && variable.getGroup().equals(var)).findFirst();
@@ -35,6 +39,7 @@ public class Memo {
 
     //TODO: salvare solo le chiavi della prima HASHMAP di HISTORY come NOME : ESPRESSIONE
     public static void saveHistory() {
+        System.out.println("called");
         return;
     }
 }
